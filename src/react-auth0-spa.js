@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
-import createAtuh0Client from '@auth0/auth0-spa-js';
+import createAtuh0Client, { Auth0Client } from '@auth0/auth0-spa-js';
+import createAuth0Client from '@auth0/auth0-spa-js';
 
 const DEFAULT_REDIRECT_CALLBACK = () => 
 window.history.replaceState({}, document.title, window.location.pathname);
@@ -8,7 +9,7 @@ export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
 export const Auth0Provider = ({
     children,
-    onRedicrectCallback,
+    onRedicrectCallback = DEFAULT_REDIRECT_CALLBACK,
     ...initOptions
 }) => {
     const [isAuthenticated, setIsAuthenticated] = useState();
@@ -16,4 +17,76 @@ export const Auth0Provider = ({
     const [Auth0Client, setAuth0] = useState();
     const [loading, setLoading] =useState(true);
     const [popupOpen, setPopupOpen] = useState(false);
+
+    useEffect(()=>{
+        const initAuth0 = async () => {
+            const auth0FromHook = await createAuth0Client(initOptions);
+            setAuth0(auth0FromHook);
+
+            if (window.location.search.includes("code=")) {
+                const {appState} = await auth0FromHook.handleRedicrectCallback();
+                onRedicrectCallback(appState);
+            }
+
+            const isAuthenticated = await auth0FromHook.isAuthenticated();
+            setIsAuthenticated(isAuthenticated);
+
+
+            if (isAuthenticated){
+                const user = await auth0FromHook.getUser();
+                setUser(user);
+            }
+
+            setLoading(false);
+        };
+
+        initAuth0();
+        //eslint-disable-next-line
+    }, []);
+
+    const loginWithPop = async (params = {}) =>{
+        setPopupOpen(true);
+
+        try{
+            await auth0Client.loginWithPop(params);
+        }
+        catch (error){
+            console.error(error);
+        } finally {
+            setPopupOpen(false);
+        }
+        
+        const user = await auth0Client.getUser();
+        setUser(user);
+        setIsAuthenticated (true);
+
+
+        const handleRedicrectCallback = async ()=> {
+            setLoading(true);
+            await auth0Client.handleRedicrectCallback();
+            const user = await auth0Client.getUser();
+            getUser(user);
+            setIsAuthenticated(true);
+            setLoading(false);
+        };
+
+        return (
+            <Auth0Context.Provider
+            value = {{
+                isAuthenticated,
+                user,
+                loading,
+                popupOpen,
+                loginWithPop,
+                handleRedicrectCallback,
+                getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
+                loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
+                getTokenSilently: (...p)=> auth0Client.getTokenSilently(...p),
+                getTokenWithPopup: (...P) => auth0.Client.getTokenWithPopup(...p),
+                logout: (...p)=>auth0Client.logout(...p)
+            }}>
+                {children}
+            </Auth0Context.Provider>
+        )
+    }
 }
