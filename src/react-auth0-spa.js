@@ -24,7 +24,7 @@ export const Auth0Provider = ({
             setAuth0(auth0FromHook);
 
             if (window.location.search.includes("code=")) {
-                const {appState} = await auth0FromHook.handleRedicrectCallback();
+                const {appState} = await auth0FromHook.handleRedirectCallback();
                 onRedicrectCallback(appState);
             }
 
@@ -61,9 +61,9 @@ export const Auth0Provider = ({
         setIsAuthenticated (true);
 
 
-        const handleRedicrectCallback = async ()=> {
+        const handleRedirectCallback = async ()=> {
             setLoading(true);
-            await auth0Client.handleRedicrectCallback();
+            await auth0Client.handleRedirectCallback();
             const user = await auth0Client.getUser();
             getUser(user);
             setIsAuthenticated(true);
@@ -78,7 +78,7 @@ export const Auth0Provider = ({
                 loading,
                 popupOpen,
                 loginWithPop,
-                handleRedicrectCallback,
+                handleRedirectCallback,
                 getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
                 loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
                 getTokenSilently: (...p)=> auth0Client.getTokenSilently(...p),
