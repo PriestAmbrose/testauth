@@ -1,13 +1,13 @@
 // src/components/NavBar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth0 } from '../react-auth0-spa';
+import { Auth0Context } from '../react-auth0-spa';
 
 const NavBar = () => { //main component for the whole web page
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0(); //unpacking fields from object
+  const { isAuthenticated, loginWithRedirect, logout } = React.useContext(Auth0Context); //unpacking fields from object
   //when you click "Log in" - you invoke loginWithRedirect()
   //when you click "Log out" - you invoke logout() function
-  //you check isAuthenticated by invoking useAuth0() in the beginning of all process to load the page
+  //you check isAuthenticated by invoking Auth0Context in the beginning of all process to load the page
 
   return (
     <div>

@@ -5,8 +5,7 @@ import createAuth0Client from '@auth0/auth0-spa-js';
 const DEFAULT_REDIRECT_CALLBACK = () =>
   window.history.replaceState({}, document.title, window.location.pathname);
 
-export const Auth0Context = React.createContext();
-export const useAuth0 = () => useContext(Auth0Context); // you call this before you first load the page
+export const Auth0Context = React.createContext();// you call this before you first load the page
 //this exported function is used to show navbar
 
 export const Auth0Provider = ({

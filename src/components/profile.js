@@ -1,9 +1,9 @@
 import React from 'react'
-import {useAuth0} from '../react-auth0-spa';
+import {Auth0Context} from '../react-auth0-spa';
 
 
 const Profile = ()=> {
-    const {loading, user} = useAuth0();  //unpacking fields from object
+    const {loading, user} = React.useContext(Auth0Context);  //unpacking fields from object
 
     if (loading || !user){
         return (
