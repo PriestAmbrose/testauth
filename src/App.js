@@ -6,7 +6,7 @@ import Profile from './components/profile';
 import PrivateRoute from './components/PrivateRoute'
 
 function App() {
-  const { loading } = useAuth0();
+  const { loading } = useAuth0();  //unpacking fields from object
 
   if (loading) {
     return <div>Loading...</div>;
@@ -18,7 +18,8 @@ function App() {
         <header>
           <NavBar />
         </header>
-        <Switch>
+        <Switch> 
+        {/* switch component with options of routs */}
           <Route path="/" exact />
           <PrivateRoute path="/profile" component={Profile} />
         </Switch>

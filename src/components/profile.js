@@ -3,7 +3,7 @@ import {useAuth0} from '../react-auth0-spa';
 
 
 const Profile = ()=> {
-    const {loading, user} = useAuth0();
+    const {loading, user} = useAuth0();  //unpacking fields from object
 
     if (loading || !user){
         return (
