@@ -1,5 +1,6 @@
 // react-auth0-spa.js
-import React, { useState, useEffect, useContext } from 'react';
+//Single Page Applications
+import React, { useState, useEffect} from 'react';
 import createAuth0Client from '@auth0/auth0-spa-js';
 
 const DEFAULT_REDIRECT_CALLBACK = () =>
@@ -8,12 +9,15 @@ const DEFAULT_REDIRECT_CALLBACK = () =>
 export const Auth0Context = React.createContext();// you call this before you first load the page
 //this exported function is used to show navbar
 
-export const Auth0Provider = ({
+export const Auth0Provider = ({ //SDK (software development kit) wrapper
   children,
   onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
   ...initOptions
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState();
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(); //this is a react hook 
+  // this hook returns two things: variable and a function to change it
+
   const [user, setUser] = useState();
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
@@ -69,7 +73,7 @@ export const Auth0Provider = ({
 
   return (
     <Auth0Context.Provider
-      value={{
+      value={{ // this is where we have unpacking object fields - from this context!
         isAuthenticated,
         user,
         loading,
@@ -87,3 +91,23 @@ export const Auth0Provider = ({
     </Auth0Context.Provider>
   );
 };
+
+export const Example  = () => {
+  const [count, setCount] = useState(0);
+
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+

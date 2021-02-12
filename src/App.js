@@ -18,10 +18,15 @@ function App() {
         <header>
           <NavBar />
         </header>
-        <Switch> 
-        {/* switch component with options of routs */}
-          <Route path="/" exact />
+        <Switch> {/* switch component with options of routs
+        Renders the first child <Route> or <Redirect> that matches the location. */}
+
+          <Route path="/" exact /> 
+          {/* exact keyword makes sure it only goes to that route in that instance
+           without it /profile is not going to load
+          */}
           <PrivateRoute path="/profile" component={Profile} />
+          
         </Switch>
       </BrowserRouter>
     </div>
